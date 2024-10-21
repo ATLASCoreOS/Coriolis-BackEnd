@@ -1,16 +1,27 @@
 // routes/IncAccNrMiss.js
-
 const express = require('express');
 const router = express.Router();
-const { reportIncident, getAllReports } = require('../controllers/IncAccNrMissController');
-const auth = require('../middleware/auth');
+const {
+  createReport,
+  getAllReports,
+  getReportById,
+  updateReport,
+  deleteReport
+} = require('../controllers/IncAccNrMissController');
 
-// Route to report a new incident/accident/near miss (protected)
-// POST /api/reports
-router.post('/report', auth, reportIncident);
+// POST: Create a new report
+router.post('/', createReport);
 
-// Route to get all reports (protected, admin only)
-// GET /api/reports
-router.get('/', auth, getAllReports);
+// GET: Retrieve all reports
+router.get('/', getAllReports);
+
+// GET: Retrieve a specific report by ID
+router.get('/:id', getReportById);
+
+// PUT: Update a report by ID
+router.put('/:id', updateReport);
+
+// DELETE: Delete a report by ID
+router.delete('/:id', deleteReport);
 
 module.exports = router;

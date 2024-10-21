@@ -9,16 +9,16 @@ const IncidentSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['Incident', 'Accident', 'Near Miss'], // Ensure valid types
+    enum: ['Incident', 'Accident', 'Near Miss'],  // Valid types of reports
     required: true,
   },
   severity: {
     type: String,
-    enum: ['Low', 'Medium', 'High', 'Critical'],
+    enum: ['Low', 'Medium', 'High', 'Critical'],  // Severity of the event
     required: true,
   },
   reportedBy: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,  // Reference to the user who reported the event
     ref: 'User',
     required: true,
   },

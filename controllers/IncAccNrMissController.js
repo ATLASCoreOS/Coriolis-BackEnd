@@ -1,34 +1,62 @@
 // controllers/IncAccNrMissController.js
+const IncAccNrMiss = require('../models/IncAccNrMiss');
 
-const Incident = require('../models/Incident');
-
-// Report an incident, accident, or near miss
-exports.reportIncident = async (req, res) => {
-  const { description, type, severity } = req.body;
-
+// Create a new report
+exports.createReport = async (req, res) => {
   try {
-    const newIncident = new Incident({
-      description,
-      type,  // 'Incident', 'Accident', 'Near Miss'
-      severity,
-      reportedBy: req.user.id  // User ID from JWT (provided by auth middleware)
-    });
-
-    const incident = await newIncident.save();
-    res.json(incident);
+    const report = new IncAccNrMiss(req.body);
+    await report.save();
+    res.status(201).json(report);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: err.message });
   }
 };
 
-// Get all incidents/accidents/near misses
+// Get all reports
 exports.getAllReports = async (req, res) => {
   try {
-    const incidents = await Incident.find().populate('reportedBy', ['name', 'email']);  // Populate 'reportedBy' field with user details
-    res.json(incidents);
+    const reports = await IncAccNrMiss.find();
+    res.status(200).json(reports);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Get a specific report by ID
+exports.getReportById = async (req, res) => {
+  try {
+    const report = await IncAccNrMiss.findById(req.params.id);
+    if (!report) {
+      return res.status(404).json({ message: 'Report not found' });
+    }
+    res.status(200).json(report);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Update a report
+exports.updateReport = async (req, res) => {
+  try {
+    const report = await IncAccNrMiss.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!report) {
+      return res.status(404).json({ message: 'Report not found' });
+    }
+    res.status(200).json(report);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Delete a report
+exports.deleteReport = async (req, res) => {
+  try {
+    const report = await IncAccNrMiss.findByIdAndDelete(req.params.id);
+    if (!report) {
+      return res.status(404).json({ message: 'Report not found' });
+    }
+    res.status(200).json({ message: 'Report deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };

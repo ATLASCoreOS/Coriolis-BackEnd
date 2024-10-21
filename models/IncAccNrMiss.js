@@ -1,31 +1,64 @@
-// models/Incident.js
-
+// models/IncAccNrMiss.js
 const mongoose = require('mongoose');
 
-const IncidentSchema = new mongoose.Schema({
+const IncAccNrMissSchema = new mongoose.Schema({
+  reportType: {
+    type: String,
+    enum: ['Incident', 'Accident', 'Near Miss'],
+    required: true,
+  },
+  vesselName: {
+    type: String,
+    required: true,
+  },
+  vesselMaster: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  vesselCrew: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }],
   description: {
     type: String,
     required: true,
   },
-  type: {
-    type: String,
-    enum: ['Incident', 'Accident', 'Near Miss'],  // Valid types of reports
-    required: true,
-  },
-  severity: {
-    type: String,
-    enum: ['Low', 'Medium', 'High', 'Critical'],  // Severity of the event
-    required: true,
-  },
-  reportedBy: {
-    type: mongoose.Schema.Types.ObjectId,  // Reference to the user who reported the event
-    ref: 'User',
-    required: true,
-  },
-  dateReported: {
+  date: {
     type: Date,
     default: Date.now,
   },
+  location: {
+    type: String,
+    required: true,
+  },
+  reportedBy: {
+    type: String,
+    required: true,
+  },
+  correctiveAction: {
+    type: String,
+  },
+  status: {
+    type: String,
+    enum: ['Open', 'Closed'],
+    default: 'Open',
+  },
+  // New fields for investigation
+  investigationReport: {
+    type: String,
+  },
+  investigatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false,
+  },
+  investigationDate: {
+    type: Date,
+    required: false,
+  },
+  // Additional fields like witnesses, equipment involved, etc.
 });
 
-module.exports = mongoose.model('Incident', IncidentSchema);
+module.exports = mongoose.model('IncAccNrMiss', IncAccNrMissSchema);

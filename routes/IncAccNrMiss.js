@@ -1,15 +1,10 @@
 // routes/IncAccNrMiss.js
+
 const express = require('express');
 const router = express.Router();
-const {
-  createReport,
-  getAllReports,
-  getReportById,
-  updateReport,
-  deleteReport
-} = require('../controllers/IncAccNrMissController');
+const { createReport, getAllReports, getReportById, updateReport, deleteReport } = require('../controllers/IncAccNrMissController');
 
-// POST: Create a new report
+// POST: Create a new incident/accident/near miss report
 router.post('/', createReport);
 
 // GET: Retrieve all reports

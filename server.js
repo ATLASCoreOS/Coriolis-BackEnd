@@ -1,29 +1,22 @@
-// server.js
-
 const express = require('express');
-const connectDB = require('./config/database');
 const dotenv = require('dotenv');
-const authRoutes = require('./routes/authRoutes');
-const incAccNrMissRoutes = require('./routes/IncAccNrMiss');  // Import the new routes for incident/accident reporting
+const connectDB = require('./config/database');
+const userRoutes = require('./routes/User');
 
-// Load environment variables
 dotenv.config();
-
-// Connect to the database
-connectDB();
+connectDB();  // Connect to MongoDB
 
 const app = express();
 
-// Middleware to parse JSON bodies
+// Middleware to parse JSON
 app.use(express.json());
 
-// API Routes
-app.use('/api/auth', authRoutes);  // Authentication routes
-app.use('/api/reports', incAccNrMissRoutes);  // Routes for incidents, accidents, near misses
+// API routes
+app.use('/api/users', userRoutes);  // Use the user routes
 
-// Test route to check if API is running
+// Test route
 app.get('/', (req, res) => {
-  res.send('Coriolis QSMS API is running...');
+  res.send('API is running...');
 });
 
 // Start the server
